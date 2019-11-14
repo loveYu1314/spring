@@ -178,17 +178,19 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		return this.beanNameGenerator;
 	}
 
-
+	//重载方法，调用 loadBeanDefinitions(String);
 	@Override
 	public int loadBeanDefinitions(Resource... resources) throws BeanDefinitionStoreException {
 		Assert.notNull(resources, "Resource array must not be null");
 		int counter = 0;
 		for (Resource resource : resources) {
+			// 调用XmlBeanDefinitionReader.loadBeanDefinitions(resource)
 			counter += loadBeanDefinitions(resource);
 		}
 		return counter;
 	}
 
+	//重载方法，调用下面的 loadBeanDefinitions(String, Set<Resource>)方法
 	@Override
 	public int loadBeanDefinitions(String location) throws BeanDefinitionStoreException {
 		return loadBeanDefinitions(location, null);
@@ -210,6 +212,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource[])
 	 */
 	public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
+		// 获取在IOC容器初始化过程中设置的资源加载器
 		ResourceLoader resourceLoader = getResourceLoader();
 		if (resourceLoader == null) {
 			throw new BeanDefinitionStoreException(
@@ -219,7 +222,9 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
+				// 将指定位置的Bean定义资源文件解析为Spring IOC容器封装的资源；加载多个指定位置的Bean定义资源
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				// 调用其子类XmlBeanDefinitionReader的方法，实现加载功能
 				int loadCount = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					for (Resource resource : resources) {
@@ -238,7 +243,9 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		}
 		else {
 			// Can only load single resources by absolute URL.
+			//将指定位置的 Bean 定义资源文件解析为 Spring IOC 容器封装的资源；加载单个指定位置的 Bean 定义资源文件
 			Resource resource = resourceLoader.getResource(location);
+			//委派调用其子类 XmlBeanDefinitionReader 的方法，实现加载功能
 			int loadCount = loadBeanDefinitions(resource);
 			if (actualResources != null) {
 				actualResources.add(resource);
