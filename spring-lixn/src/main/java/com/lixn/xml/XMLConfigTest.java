@@ -6,6 +6,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
@@ -34,6 +35,9 @@ public class XMLConfigTest {
 
 
 		ApplicationContext context = new FileSystemXmlApplicationContext("spring-config.xml");
+
+		ClassPathXmlApplicationContext xmlApplicationContext =
+				new ClassPathXmlApplicationContext("spring-config.xml");
 
 	}
 }
