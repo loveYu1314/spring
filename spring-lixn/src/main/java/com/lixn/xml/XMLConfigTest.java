@@ -18,12 +18,12 @@ import org.springframework.core.io.ClassPathResource;
 public class XMLConfigTest {
 
 	public static void main(String[] args) {
-//		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("spring-config.xml"));
+//		BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("spring-.xml"));
 //		XMLTestBean bean = (XMLTestBean)beanFactory.getBean("testBean");
 //		System.out.println(bean.getXmlStr());
 
 		// 根据Xml配置文件创建Resource资源对象，该对象包含了BeanDefinition的信息
-//		ClassPathResource resource = new ClassPathResource("spring-config.xml");
+//		ClassPathResource resource = new ClassPathResource("spring-.xml");
 		// 创建DefaultListableBeanFactory
 //		DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 		// 创建 XmlBeanDefinitionReader 读取器，用于载入BeanDefinition
@@ -34,10 +34,10 @@ public class XMLConfigTest {
 //		reader.loadBeanDefinitions(resource);
 
 
-//		ApplicationContext context = new FileSystemXmlApplicationContext("spring-config.xml");
+//		ApplicationContext context = new FileSystemXmlApplicationContext("spring-.xml");
 
-		ClassPathXmlApplicationContext xmlApplicationContext =
-				new ClassPathXmlApplicationContext("spring-config.xml");
-
+//		ClassPathXmlApplicationContext xmlApplicationContext =
+//				new ClassPathXmlApplicationContext("spring-.xml");
+//		xmlApplicationContext.getBean("testBean");
 	}
 }

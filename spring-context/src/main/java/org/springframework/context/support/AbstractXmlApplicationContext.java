@@ -89,7 +89,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 		// 为Bean读取器设置Spring资源加载器，该类的继承关系中有继承DefaultResourceLoader，容器本身也是一个资源加载器
 		beanDefinitionReader.setEnvironment(this.getEnvironment());
 		beanDefinitionReader.setResourceLoader(this);
-		// 为Bean读取器设置SAX 项目来解析器
+		// 为Bean读取器设置SAX xml来解析器
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
