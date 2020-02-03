@@ -43,11 +43,19 @@ import org.springframework.lang.Nullable;
  * @author Rod Johnson
  * @author Adrian Colyer
  * @since 2.0.3
+ *
+ * 给定“建议”对象的情况下，为方法制定建议链的一种简单但确定的方法。 始终重建每个建议链； 缓存可以由子类提供。
+ * 这个工厂负责生成拦截器链
  */
 @SuppressWarnings("serial")
 public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializable {
 
 	@Override
+	/**
+	 * 从提供的配置实例 config 中获取 advisor 列表,遍历处理这些 advisor.如果是 IntroductionAdvisor
+	 * 则判断此 Advisor 能否应用到目标类 targetClass 上.如果是 PointcutAdvisor,则判断
+	 * 此 Advisor 能否应用到目标方法 Method 上.将满足条件的 Advisor 通过 AdvisorAdaptor 转化成 Interceptor 列表返回.
+	 */
 	public List<Object> getInterceptorsAndDynamicInterceptionAdvice(
 			Advised config, Method method, @Nullable Class<?> targetClass) {
 
@@ -55,16 +63,23 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		// but we need to preserve order in the ultimate list.
 		List<Object> interceptorList = new ArrayList<Object>(config.getAdvisors().length);
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
+
+		//查看是否包含 IntroductionAdvisor
 		boolean hasIntroductions = hasMatchingIntroductions(config, actualClass);
+
+		//这里实际上注册一系列 AdvisorAdapter,用于将 Advisor 转化成 MethodInterceptor
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
 
+		//从提供的配置实例 config 中获取 advisor 列表
 		for (Advisor advisor : config.getAdvisors()) {
 			if (advisor instanceof PointcutAdvisor) {
 				// Add it conditionally.
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
+					//检查当前 advisor 的 pointcut 是否可以匹配当前方法
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					if (MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) {
+						//这个地方这两个方法的位置可以互换下，将 Advisor 转化成 Interceptor
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method

@@ -119,16 +119,20 @@ public class BeanDefinitionReaderUtils {
 		}
 
 		String id = generatedBeanName;
+		//Bean里面嵌套Bean
 		if (isInnerBean) {
 			// Inner bean: generate identity hashcode suffix.
+			//Bean名称 + "#" + 数字或字符  来唯一标识Bean名称
 			id = generatedBeanName + GENERATED_BEAN_NAME_SEPARATOR + ObjectUtils.getIdentityHexString(definition);
 		}
 		else {
 			// Top-level bean: use plain class name.
 			// Increase counter until the id is unique.
 			int counter = -1;
+
 			while (counter == -1 || registry.containsBeanDefinition(id)) {
-				counter++;
+				counter++;//通过Bean的数量
+				//Bean名称 + "#" + 数字
 				id = generatedBeanName + GENERATED_BEAN_NAME_SEPARATOR + counter;
 			}
 		}

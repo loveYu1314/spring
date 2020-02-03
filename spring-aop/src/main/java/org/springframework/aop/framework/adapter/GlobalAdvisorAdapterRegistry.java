@@ -23,6 +23,8 @@ package org.springframework.aop.framework.adapter;
  * @author Juergen Hoeller
  * @author Phillip Webb
  * @see DefaultAdvisorAdapterRegistry
+ *
+ * 负责拦截器的适配和注册过程，这里使用的是饿汉式单例模式创建DefaultAdvisorAdapterRegistry实例
  */
 public abstract class GlobalAdvisorAdapterRegistry {
 
